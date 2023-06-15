@@ -5,7 +5,7 @@ import hsa2.GraphicsConsole;
 import java.awt.*;
 
 public class Alien {
-    private int x, y;
+    private int x, y, w, h;
     private int health;
     private int damage;
     private Image img;
@@ -13,9 +13,11 @@ public class Alien {
     private int centerX, centerY;
     private double angle = 0;
 
-    public Alien(int x, int y, int health, int damage, Image img) {
+    public Alien(int x, int y, int w, int h, int health, int damage, Image img) {
         this.x = x;
         this.y = y;
+        this.w = w;
+        this.h = h;
         this.health = health;
         this.damage = damage;
         this.img = img;
@@ -25,7 +27,7 @@ public class Alien {
     }
 
     public void draw(GraphicsConsole gc) {
-        gc.drawImage(img, x, y, 296, 220);
+        gc.drawImage(img, x, y, w, h);
     }
 
     public void move() {
@@ -34,6 +36,21 @@ public class Alien {
         x = centerX + (int) (25 * Math.cos(angle));
         y = centerY + (int) (25 * Math.sin(angle));
     }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+     public int getWidth() {
+        return w;
+     }
+
+     public int getHeight() {
+        return h;
+     }
 }
 
 
