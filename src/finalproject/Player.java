@@ -16,11 +16,11 @@ public class Player {
     private boolean doubleJumped;
     private Clip pluh;
     private Image img;
-    private boolean attack =false;
+    private boolean attack = false;
+    private Sword sword;
 
 
-
-    public Player(int x, int y, int w, int h, int health, int damage, Image img, Clip pluh) {
+    public Player(int x, int y, int w, int h, int health, int damage, Image img, Clip pluh, Sword sword) {
         this.x = x;
         this.y = y;
         this.w = w;
@@ -29,15 +29,16 @@ public class Player {
         this.damage = damage;
         this.img = img;
         this.pluh = pluh;
+        this.sword = sword;
     }
 
     public void jump() {
         y -= jumpForce;
         jumpForce -= FinalProject.GRAVITY;
-        if (jumpForce <= 0 && y >= FinalProject.GROUND_LEVEL) {
+        if (jumpForce <= 0 && y >= FinalProject.GROUND_LEVEL - 178) {
             jumping = false;
             doubleJumped = false;
-            y = FinalProject.GROUND_LEVEL;
+            y = FinalProject.GROUND_LEVEL - 178;
         }
     }
 
@@ -57,8 +58,8 @@ public class Player {
     public void draw(GraphicsConsole gc) {
         gc.drawImage(img, x, y, w, h);
 
+        if (sword.isThrown()) sword.drawSword(gc);
     }
-
 
 
     public void move(GraphicsConsole gc) {
@@ -76,32 +77,38 @@ public class Player {
             }
             if (gc.isKeyDown('W')) if (y >= FinalProject.GROUND_LEVEL && !jumping) {
                 jumping = true;
-                jumpForce = 25;
+                jumpForce = 50;
             } else if (!doubleJumped) {
                 doubleJumped = true;
                 jumping = true;
-                jumpForce = 25;
+                jumpForce = 50;
             }
         }
         if (jumping) jump();
 
         if (pushed) push();
+
+        sword.setStartLoc(x, y + (178 / 2));
+
+        if (sword.isThrown()) sword.move();
     }
 
     public void attack(GraphicsConsole gc) {
-        if (gc.isKeyDown(' ')) {
-            attack=true;
-            gc.playSound(pluh);
-
+        if (!sword.isThrown()) {
+            if (gc.isKeyDown(' ')) {
+                attack = true;
+                gc.playSound(pluh);
+                sword.setThrown(true);
+            }
         }
     }
 
-    public boolean getAttack(){
+    public boolean getAttack() {
         return attack;
     }
 
-    public void setAttack(boolean a){
-        attack=a;
+    public void setAttack(boolean a) {
+        attack = a;
     }
 
     public int getX() {

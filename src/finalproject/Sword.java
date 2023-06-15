@@ -8,64 +8,58 @@ import java.awt.*;
 public class Sword {
     private int x;
     private int y;
-    private int targetX;
-    private int targetY;
-    private int speedX;
-    private int speedY;
+    private int w, h;
+    private int startX;
+    private int startY;
+    private int throwForce;
+    private Image image;
 
     private double slope;
 
     private int b;
 
-    private boolean toss;
+    private boolean thrown;
 
-    public Sword(int x, int y, boolean t) {
-        this.x = x;
-        this.y = y;
-        this.toss = t;
+    public Sword(int x, int y, int w, int h, Image image) {
+        this.x = startX = x;
+        this.y = startY = y;
+        this.w = w;
+        this.h = h;
+        thrown = false;
+        throwForce = 0;
+        this.image = image;
     }
 
-    void drawSword (GraphicsConsole gc ){
-        gc.fillOval(x,y,10, 10);
-    }
-    void throwSword(Player p, Alien a) throws InterruptedException {
-        toss = true;
-        this.x = p.getX()+200;
-        this.y = p.getY()+500;
-
-        this.targetX = a.getX()+50;
-        this.targetY = a.getY()+200;
-
-        // a + (b-a)*t
-
-        // swordX = this.x = (this.target.x - this.x) * t   t = the percent between the points, 0.5 = 50%
-
-        int startX = p.getX();
-        int startY = p.getY();
-
-
-        this.slope=Double.valueOf(targetY - y)/Double.valueOf(targetX - x);
-        System.out.println("x "+this.x+" y "+this.y+" targetX "+this.targetX+" targety "+this.targetY+" slope "+this.slope);
-        this.b=this.y;
-
+    public void drawSword (GraphicsConsole gc ){
+        gc.drawImage(image, x, y);
     }
 
-    boolean getToss(){
-        return toss;
+    public boolean isThrown() {
+        return thrown;
     }
 
-    void moveSword(Alien a, Player p){
+    void move(){
+        if (y < FinalProject.GROUND_LEVEL) {
+            x += 80;
+            y -= throwForce;
+            throwForce -= FinalProject.GRAVITY;
+        } else {
+            thrown = false;
+            x = startX;
+            y = startY;
+        }
+    }
 
+    public void setStartLoc(int x, int y) {
+        startX = x;
+        startY = y;
+    }
 
-        this.slope = 0.5; //(p.getX() - a.getX()) / (p.getY() - a.getY());
+    public void setThrown(boolean thrown) {
+        this.thrown = thrown;
+        throwForce = 20;
 
-
-        this.x += 15;
-        double result = (this.slope * this.x);
-
-        this.y =(int)result;
-        System.out.println("x " +x+ " y "+y+" result "+result+" slope "+slope);
-
-
+        x = startX;
+        y = startY;
     }
 }

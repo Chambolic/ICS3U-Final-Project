@@ -7,37 +7,30 @@ import javax.sound.sampled.FloatControl;
 import java.awt.*;
 
 public class FinalProject {
-    public static void main(String[] args) throws InterruptedException {
-        new FinalProject();
-    }
+    public static Player player;
 
 //graphics console
-
-    public static Player player;
-    private Alien alien;
-
-    private Sword sword;
-    public static int GROUND_LEVEL = 450;
-    static int GRAVITY = 5;
+    public static int GROUND_LEVEL = 750;
+    public static int GRAVITY = 5;
     static GraphicsConsole gc = new GraphicsConsole(1000, 900,
             "Chronicles of the Celestial Realms: Ascendancy of Eternal Dominion");
-
+    private Alien alien;
     FinalProject() throws InterruptedException {
         Image backgroundImage = Toolkit.getDefaultToolkit()
                 .getImage(gc.getClass().getClassLoader().getResource("Images/Forest.jpg"));
         Image alienImg = gc.loadImage("src/Images/Boss.png");
         Image playerImg = gc.loadImage("src/Images/User1.png");
-        Image swordImg = gc.loadImage ("src/Images/Sword.png");
+        Image swordImg = gc.loadImage("src/Images/Sword.png");
         Clip pluh = gc.loadSound("audio/PLUH.wav");
-        FloatControl volume = (FloatControl) pluh.getControl(FloatControl.Type.MASTER_GAIN) ;
+        FloatControl volume = (FloatControl) pluh.getControl(FloatControl.Type.MASTER_GAIN);
         volume.setValue(volume.getMaximum());
         Clip song = gc.loadSound("audio/cupid.wav");
-        volume = (FloatControl) song.getControl(FloatControl.Type.MASTER_GAIN) ;
+        volume = (FloatControl) song.getControl(FloatControl.Type.MASTER_GAIN);
         volume.setValue(volume.getMinimum() / 3);
         gc.playSoundLoop(song);
-        player = new Player(175, GROUND_LEVEL, 175, 178, 230, 30, playerImg, pluh);
+        Sword sword = new Sword(175, (GROUND_LEVEL - (178 / 2)), 38, 17, swordImg);
+        player = new Player(175, GROUND_LEVEL - 178, 175, 178, 230, 30, playerImg, pluh, sword);
         alien = new Alien(500, 200, 296, 220, 750, 70, alienImg);
-        sword = new Sword (0, 0, false);
 
         while (true) {
             synchronized (gc) {
@@ -45,19 +38,11 @@ public class FinalProject {
                 gc.drawImage(backgroundImage, 0, 0, gc.getDrawWidth(), gc.getDrawHeight());
                 alien.draw(gc);
                 player.draw(gc);
-                sword.drawSword(gc);
             }
 
 
             player.move(gc);
             alien.move();
-            if (player.getAttack()==true&&sword.getToss()==false){
-                player.setAttack(false);
-                sword.throwSword(player,alien);
-            }
-            if (sword.getToss()==true){
-                sword.moveSword(alien, player);
-            }
 
             player.attack(gc);
 
@@ -72,6 +57,11 @@ public class FinalProject {
             Thread.sleep(50);
         }
 
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        System.out.println("Michael was here :)");
+        new FinalProject();
     }
 
 
