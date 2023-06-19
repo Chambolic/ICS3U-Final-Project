@@ -7,8 +7,10 @@ import java.awt.*;
 public class Alien {
     private int x, y, w, h;
     private int health;
+    private int maxHealth;
     private int damage;
     private Image img;
+    private int deathCount = 0;
 
     private int centerX, centerY;
     private double angle = 0;
@@ -18,7 +20,7 @@ public class Alien {
         this.y = y;
         this.w = w;
         this.h = h;
-        this.health = health;
+        this.health = maxHealth = health;
         this.damage = damage;
         this.img = img;
 
@@ -27,14 +29,18 @@ public class Alien {
     }
 
     public void draw(GraphicsConsole gc) {
-        gc.drawImage(img, x, y, w, h);
+        if (health > 0) {
+            gc.drawImage(img, x, y, w, h);
+        }
     }
 
     public void move() {
-        angle += 0.20;
+        if (health > 0) {
+            angle += 0.20;
 
-        x = centerX + (int) (25 * Math.cos(angle));
-        y = centerY + (int) (25 * Math.sin(angle));
+            x = centerX + (int) (25 * Math.cos(angle));
+            y = centerY + (int) (25 * Math.sin(angle));
+        }
     }
 
     public int getX() {
@@ -51,6 +57,31 @@ public class Alien {
      public int getHeight() {
         return h;
      }
+
+     public void setHealth(int newHealth) {
+        health = newHealth;
+     }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public int getDeathCount() {
+        return deathCount;
+    }
+
+    public void setDeathCount(int newCount) {
+        deathCount = newCount;
+    }
+
+    public void reset() {
+        deathCount = 0;
+        health = maxHealth;
+    }
 }
 
 

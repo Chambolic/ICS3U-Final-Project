@@ -133,6 +133,17 @@ public class Player {
     }
 
 
+    public int getDamage() {
+        return damage;
+    }
+
+    public void setHealth(int newHealth) {
+        health = newHealth;
+    }
+
+    public int getHealth() {
+        return health;
+    }
 }
 
 

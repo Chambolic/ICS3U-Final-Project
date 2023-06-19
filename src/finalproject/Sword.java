@@ -62,4 +62,20 @@ public class Sword {
         x = startX;
         y = startY;
     }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getWidth() {
+        return w;
+    }
+
+    public int getHeight() {
+        return h;
+    }
 }
